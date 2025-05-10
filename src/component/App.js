@@ -15,19 +15,20 @@ export default class App extends React.Component {
 
   handleClick = buttonName => {
     const newState = calculate(this.state, buttonName);
+    if (buttonName === "AC") {
+      this.setState({ ...newState, history: [] }); // Clear history on AC
+      return;
+    }
+
     if (newState.total !== undefined || newState.next !== undefined) {
       // Only add to history if there's a result or next value
+      const expression = newState.next
+        ? `${newState.total || 0} ${newState.operation || ""} ${newState.next}`
+        : newState.total || 0;
+      const result = newState.total || newState.next || 0;
       this.setState(prevState => ({
         ...newState,
-        history: [
-          ...prevState.history,
-          {
-            expression: prevState.next
-              ? `${prevState.total || 0} ${prevState.operation || ""} ${prevState.next}`
-              : prevState.total || 0,
-            result: newState.total || newState.next || 0,
-          },
-        ],
+        history: [...prevState.history, { expression, result }],
       }));
     } else {
       this.setState(newState);
