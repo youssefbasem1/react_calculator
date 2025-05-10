@@ -38,9 +38,9 @@ export default class App extends React.Component {
   handleKeyDown = event => {
     const { key } = event;
     // Allow only numbers, operators, decimal point, Enter, and Escape
-    if (/[0-9+\-*/.=]/.test(key) || key === "Enter" || key === "Escape") {
+    if (/[0-9+\-*/.=]/.test(key) || key === "Enter" || key === "Escape" || key === "Backspace") {
       event.preventDefault(); // Prevent default browser behavior
-      const buttonName = key === "Enter" ? "=" : key === "Escape" ? "AC" : key;
+      const buttonName = key === "Enter" ? "=" : key === "Escape" ? "AC" : key === "Backspace" ? "Backspace" : key;
       this.handleClick(buttonName);
     }
   };
