@@ -2,7 +2,7 @@ import React from "react";
 import Display from "./Display";
 import ButtonPanel from "./ButtonPanel";
 import calculate from "../logic/calculate";
-import History from "./History"; // Import the new History component
+import History from "./History";
 import "./App.css";
 
 export default class App extends React.Component {
@@ -10,18 +10,17 @@ export default class App extends React.Component {
     total: null,
     next: null,
     operation: null,
-    history: [], // Add history array to state
+    history: [],
   };
 
   handleClick = buttonName => {
     const newState = calculate(this.state, buttonName);
     if (buttonName === "AC") {
-      this.setState({ ...newState, history: [] }); // Clear history on AC
+      this.setState({ ...newState, history: [] });
       return;
     }
 
     if (newState.total !== undefined || newState.next !== undefined) {
-      // Only add to history if there's a result or next value
       const expression = newState.next
         ? `${newState.total || 0} ${newState.operation || ""} ${newState.next}`
         : newState.total || 0;
@@ -37,10 +36,9 @@ export default class App extends React.Component {
 
   handleKeyDown = event => {
     const { key } = event;
-    // Allow only numbers, operators, decimal point, Enter, and Escape
     if (/[0-9+\-*/.=]/.test(key) || key === "Enter" || key === "Escape" || key === "Backspace") {
-      event.preventDefault(); // Prevent default browser behavior
-      const buttonName = key === "Enter" ? "=" : key === "Escape" ? "AC" : key === "Backspace" ? "Backspace" : key;
+      event.preventDefault();
+      const buttonName = key === "Enter" ? "=" : key === "Escape" ? "AC" : key === "Backspace" ? "⌫" : key;
       this.handleClick(buttonName);
     }
   };
@@ -50,7 +48,7 @@ export default class App extends React.Component {
       <div className="component-app" onKeyDown={this.handleKeyDown} tabIndex="0">
         <Display value={this.state.next || this.state.total || "0"} />
         <ButtonPanel clickHandler={this.handleClick} />
-        <History history={this.state.history} /> {/* Render the History component */}
+        <History history={this.state.history} />
       </div>
     );
   }
